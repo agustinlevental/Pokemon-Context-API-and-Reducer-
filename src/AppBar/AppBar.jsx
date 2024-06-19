@@ -6,7 +6,7 @@ import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import HomeIcon from "@mui/icons-material/Home";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import { ThemeProvider } from "styled-components";
+import { ThemeProvider } from '@mui/material/styles';
 import PikachuIcon from "./PikachuIcon";
 import styles from './AppBar.module.css';
 import { createTheme } from "@mui/material";
@@ -24,7 +24,7 @@ const theme = createTheme({
   },
 });
 
-export default function CustomAppBar({  }) {
+export default function CustomAppBar() {
   const [isStarClicked, setIsStarClicked] = useState(false);
   const [isHomeClicked, setIsHomeClicked] = useState(true);
 
