@@ -10,25 +10,23 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 
 export default function ImgMediaCard({
-  pokemon,
-  onEditPokemon,
-  onAddToFavourite,
+  pokemon, onAddToFavourite, isFavourite ,onEditPokemon
 }) {
   const [showModifyOptions, setShowModifyOptions] = useState(false);
   const [inputChangedname, setInputChangedname] = useState(pokemon.name);
-  const [starIsClicked, setStarIsClicked] = useState(false);
+  
 
   const handleChangeNameClick = () => {
     const newPokemon = {
       id: pokemon.id,
-      name: inputChangedname || pokemon.name,
+      name: inputChangedname ,
       imgSrc: pokemon.imgSrc,
       ability: pokemon.ability,
       weight: pokemon.weight,
     };
     onEditPokemon(newPokemon);
     setShowModifyOptions(false);
-    setInputChangedname("");
+    
   };
   const handleCancel = () => {
     setInputChangedname(pokemon.name);
@@ -36,7 +34,7 @@ export default function ImgMediaCard({
   };
   const handleAddToFavourite = (pokemon) => {
     onAddToFavourite(pokemon);
-    setStarIsClicked(true);
+   
   };
   return (
     <Card sx={{ width: 200, margin: 2 }}>
@@ -70,7 +68,7 @@ export default function ImgMediaCard({
       </CardContent>
       <CardActions>
         <IconButton onClick={() => handleAddToFavourite(pokemon)}>
-          {starIsClicked ? <StarIcon /> : <StarBorderIcon />}
+        {isFavourite ? <StarIcon /> : <StarBorderIcon />}
         </IconButton>
         <Button
           size="small"

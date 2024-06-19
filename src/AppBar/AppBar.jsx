@@ -10,6 +10,7 @@ import { ThemeProvider } from "styled-components";
 import PikachuIcon from "./PikachuIcon";
 import styles from './AppBar.module.css';
 import { createTheme } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const theme = createTheme({
   components: {
@@ -23,20 +24,20 @@ const theme = createTheme({
   },
 });
 
-export default function CustomAppBar({ onShowFavourites,onShowHome }) {
+export default function CustomAppBar({  }) {
   const [isStarClicked, setIsStarClicked] = useState(false);
   const [isHomeClicked, setIsHomeClicked] = useState(true);
 
   const handleStarClick = () => {
     setIsStarClicked(true);
     setIsHomeClicked(false);
-    onShowFavourites()
+ 
   };
 
   const handleHomeClick = () => {
     setIsHomeClicked(true);
     setIsStarClicked(false);
-    onShowHome()
+    
   };
 
   return (
@@ -46,12 +47,16 @@ export default function CustomAppBar({ onShowFavourites,onShowHome }) {
         <p></p>
           <PikachuIcon className={styles.pikachuIcon} />
           <div className={styles.iconButtonGroup}>
-            <IconButton color="inherit" onClick={handleStarClick}>
-              {isStarClicked ? <StarIcon /> : <StarBorderIcon />}
-            </IconButton>
-            <IconButton color="inherit" onClick={handleHomeClick}>
-              {isHomeClicked ? <HomeIcon /> : <HomeOutlinedIcon />}
-            </IconButton>
+          <Link to="favourites">
+              <IconButton color="inherit" onClick={handleStarClick}>
+                {isStarClicked ? <StarIcon /> : <StarBorderIcon />}
+              </IconButton>
+            </Link>
+            <Link to="home">
+              <IconButton color="inherit" onClick={handleHomeClick}>
+                {isHomeClicked ? <HomeIcon /> : <HomeOutlinedIcon />}
+              </IconButton>
+            </Link>
           </div>
         </Toolbar>
       </AppBar>

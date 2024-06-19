@@ -1,20 +1,19 @@
-import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
+import { useFavourites } from "../context/favouriteContext";
 
-export default function Favourites({ favourites, onDeletePokemon }) {
+export default function Favourites() {
+  const { favourites, handleDeleteFromFavourites } = useFavourites();
 
-  const [renderedFavourites, setRenderedFavourites] = useState([]);
-
-  useEffect(() => {
-    setRenderedFavourites(favourites);
-    console.log(favourites,"favourites")
-  }, [favourites]); 
-
-  return renderedFavourites.map((pokemon) => (
-    
+  return favourites.map((pokemon) => (
     <Card sx={{ width: 200, margin: 2 }} key={pokemon.id}>
       <CardMedia
-      
         component="img"
         alt={`${pokemon.name} img`}
         height="140"
@@ -30,10 +29,14 @@ export default function Favourites({ favourites, onDeletePokemon }) {
         <Typography variant="body2" color="text.secondary">
           Weight: {pokemon.weight}
         </Typography>
-        </CardContent>
-        <CardActions>
-        <Button size="small" onClick={()=>{onDeletePokemon(pokemon)}} >Eliminar de Favoritos</Button>
-    
+      </CardContent>
+      <CardActions>
+        <Button
+          size="small"
+          onClick={() => handleDeleteFromFavourites(pokemon)}
+        >
+          Eliminar de Favoritos
+        </Button>
       </CardActions>
     </Card>
   ));

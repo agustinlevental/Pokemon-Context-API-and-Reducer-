@@ -4,16 +4,13 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import SearchAutocomplete from "./SearchAutocomplete/SearchAutocomplete";
 import ImgMediaCard from "./ImgMediaCard/ImgMediaCard";
-import Favourites from "./Favourites/Favourites";
-import CustomAppBar from "./AppBar/AppBar";
+import { useFavourites } from "./context/favouriteContext";
 
 export default function App() {
   const [pokemons, setPokemons] = useState([]);
   const [filteredPokemons, setFilteredPokemons] = useState([]);
-  const [favourites, setFavourites] = useState([]);
   const [error, setError] = useState(null);
- const [showHome,setShowHome]=useState(true)
- const [showFavourites,setShowFavourites]=useState(false)
+  const { favourites, handleAddToFavourites } = useFavourites();
 
   useEffect(() => {
     const url = "https://pokeapi.co/api/v2/pokemon";
@@ -46,52 +43,23 @@ export default function App() {
     fetchPokemons();
   }, []);
 
-  const handleShowFavourites = ()=>{
-    setShowFavourites(true)
-    setShowHome(false)
-  }
-  const handleShowHome = ()=>{
-    setShowFavourites(false)
-    setShowHome(true)
-  }
   const handleFilterChange = (filtered) => {
     setFilteredPokemons(filtered);
   };
+
   const handleEditPokemon = (newPokemon) => {
     const updatedPokemons = pokemons.map((pokemon) =>
       pokemon.id === newPokemon.id ? newPokemon : pokemon
     );
     setPokemons(updatedPokemons);
     setFilteredPokemons(updatedPokemons);
-
-    setFavourites(
-      favourites.map((pokemon) =>
-        pokemon.id === newPokemon.id ? newPokemon : pokemon
-      )
-    );
-  };
-  const handleAddToFavourites = (pokemon) => {
-    const isPokemonInFavourites = favourites.some(
-      (favPokemon) => favPokemon.id === pokemon.id
-    );
-
-    if (!isPokemonInFavourites) {
-      const nextFavourites = [...favourites, pokemon];
-      setFavourites(nextFavourites);
-    } else {
-      handleDeleteFromFavourites(pokemon);
-    }
   };
 
-  const handleDeleteFromFavourites = (pokemon) => {
-    const newFavourites = favourites.filter((p) => p.id !== pokemon.id);
-    setFavourites(newFavourites);
-  };
   return (
     <Box
       sx={{
         width: "100%",
-        height:"100%",
+        height: "100%",
         display: "flex",
         flexWrap: "wrap",
         gap: 2,
@@ -99,30 +67,23 @@ export default function App() {
         padding: 2,
       }}
     >
-      <CustomAppBar onShowFavourites={handleShowFavourites} onShowHome={handleShowHome}/>
-     { showHome&&(<Box className="home">
+      <Box className="home">
         <SearchAutocomplete
           options={pokemons}
           onFilterChange={handleFilterChange}
         />
         {error && <Typography color="error">{error}</Typography>}
-        {filteredPokemons.map((pokemon, i) => (
+        {filteredPokemons.map((pokemon) => (
           <ImgMediaCard
             key={pokemon.id}
             pokemon={pokemon}
             id={pokemon.id}
             onEditPokemon={handleEditPokemon}
             onAddToFavourite={handleAddToFavourites}
+            isFavourite={favourites.some(fav => fav.id === pokemon.id)}
           />
         ))}
-      </Box>)}
-
-    {showFavourites&&(  <Box className="Favourites">
-        <Favourites
-          favourites={favourites}
-          onDeletePokemon={handleDeleteFromFavourites}
-        />
-      </Box>)}
+      </Box>
     </Box>
   );
 }
