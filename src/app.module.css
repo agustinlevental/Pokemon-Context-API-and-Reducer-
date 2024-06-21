@@ -1,9 +1,36 @@
-.home, .favourites {
+.appContainer {
     width: 100%;
     height: 100%;
     display: flex;
-    flex-wrap: wrap;
-    gap: 2;
-    justify-content: center;
-    padding: 2;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px; /* Ajusta según necesidades */
+  }
+  
+  .searchAutocomplete {
+    width: 100%;
+    padding: 10px 0; /* Ajusta según necesidades */
+  }
+  
+  .filteredPokemons {
+    width: 100%;
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .pokemonList {
+    width: 100%;
+    display: grid;
+    margin-right: 50px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+    gap: 20px; 
+    padding: 20px; 
+  }
+  .searchAutocomplete {
+    width: 100%;
+    padding: 10px 0;  
+    background-color: white; 
+    margin: 0px 50px 0px 20px;
   }

@@ -1,7 +1,10 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useState } from "react";
+import { useFavourites } from "../context/favouriteContext";
 
-export default function SearchAutocomplete({ options, onFilterChange }) {
+
+export default function SearchAutocomplete({ options }) {
+  const { handleFilterChange } = useFavourites();
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (event, newInputValue) => {
@@ -9,9 +12,9 @@ export default function SearchAutocomplete({ options, onFilterChange }) {
     const filtered = options.filter((option) => option.name === newInputValue);
 
     if (filtered != "") {
-      onFilterChange(filtered);
+      handleFilterChange(filtered);
     } else {
-      onFilterChange(options);
+      handleFilterChange(options);
     }
   };
 
@@ -21,7 +24,6 @@ export default function SearchAutocomplete({ options, onFilterChange }) {
       id="combo-box-demo"
       options={options}
       getOptionLabel={(option) => option.name}
-      sx={{ width: 300 }}
       inputValue={inputValue}
       onInputChange={handleInputChange}
       renderInput={(params) => <TextField {...params} label="Pokemon" />}

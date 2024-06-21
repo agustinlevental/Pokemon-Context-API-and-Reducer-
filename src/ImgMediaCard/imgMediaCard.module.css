@@ -1,0 +1,13 @@
+.card {
+    height: auto; 
+  }
+  
+  .cardWithTextfield {
+    height: fit-content; 
+  }
+
+  .modifyOptions{
+     display: "flex";
+     justify-content: "center";
+    margin-top:15px ;
+  }
