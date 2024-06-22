@@ -1,131 +1,108 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useReducer, useEffect, useState } from "react";
+import axios from "axios";
 
-import { fetchPokemons } from "../service/pokemonService";
+const PokemonContext = createContext();
 
-const FavouritesContext = createContext();
-
-const actionTypes = {
-  ADD_TO_FAVOURITES: "ADD_TO_FAVOURITES",
-  DELETE_FROM_FAVOURITES: "DELETE_FROM_FAVOURITES",
-  EDIT_POKEMON: "EDIT_POKEMON",
-  SET_INITIAL_POKEMONS: "SET_INITIAL_POKEMONS",
-  FILTER_POKEMONS: "FILTER_POKEMONS",
-};
-
-const favouritesReducer = (state, action) => {
+const pokemonsReducer = (state, action) => {
   switch (action.type) {
-    case actionTypes.ADD_TO_FAVOURITES:{
+    case "addToFavourites": {
       const isPokemonInFavourites = state.favourites.some(
-        (favPokemon) => favPokemon.id === action.payload.id
+        (favPokemon) => favPokemon.id === action.pokemon.id
       );
+
       if (!isPokemonInFavourites) {
-        return {
-          ...state,
-          favourites: [...state.favourites, action.payload],
-        };
+        const nextFavourites = [...state.favourites, action.pokemon];
+        console.log(nextFavourites,"next favourites no estaba en favoritos")
+        return { ...state, favourites: nextFavourites };
+        
+      } else {
+        const newFavourites = state.favourites.filter(
+          (p) => p.id !== action.pokemon.id
+        );
+        console.log(newFavourites,"next favourites SI estaba en favoritos")
+        return { ...state, favourites: newFavourites };
       }
-      return state;}
-
-    case actionTypes.DELETE_FROM_FAVOURITES:{
+   
+    }
+    case "deleteFromFavourites": {
       const newFavourites = state.favourites.filter(
-        (pokemon) => pokemon.id !== action.payload.id
+        (p) => p.id !== action.pokemon.id
       );
-      return {
-        ...state,
-        favourites: newFavourites,}
-      };
-
-    case actionTypes.EDIT_POKEMON:{
+      return { ...state, favourites: newFavourites };
+    }
+    case "editPokemon": {
       const updatedPokemons = state.pokemons.map((pokemon) =>
-        pokemon.id === action.payload.id ? action.payload : pokemon
+        pokemon.id === action.pokemon.id ? action.pokemon : pokemon
       );
       return {
         ...state,
         pokemons: updatedPokemons,
         filteredPokemons: updatedPokemons,
-      };}
-
-    case actionTypes.SET_INITIAL_POKEMONS:
+      };
+    }
+    case "setPokemons": {
       return {
         ...state,
-        pokemons: action.payload,
-        filteredPokemons: action.payload,
+        pokemons: action.pokemons,
+        
       };
-      case actionTypes.FILTER_POKEMONS:
-        return {
-          ...state,
-          filteredPokemons: action.payload,
-        };
-
+    }
+    case "setFilteredPokemons": {
+      return {
+        ...state,
+        filteredPokemons: action.pokemons,
+      };
+    }
     default:
       return state;
   }
 };
 
-export const FavouritesProvider = ({ children }) => {
-  const initialState = {
+const PokemonProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(pokemonsReducer, {
     pokemons: [],
     filteredPokemons: [],
     favourites: [],
-  };
-
-  const [state, dispatch] = useReducer(favouritesReducer, initialState);
+  });
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const storedPokemons = localStorage.getItem("pokemon");
+    const url = "https://pokeapi.co/api/v2/pokemon";
 
-        if (storedPokemons) {
-          const parsedPokemons = JSON.parse(storedPokemons);
-          dispatch({ type: actionTypes.SET_INITIAL_POKEMONS, payload: parsedPokemons.results });
-        } else {
-          const pokemonDetails = await fetchPokemons();
-          dispatch({ type: actionTypes.SET_INITIAL_POKEMONS, payload: pokemonDetails });
-          localStorage.setItem("pokemon", JSON.stringify({ results: pokemonDetails }));
-        }
-      } catch (error) {
-        console.error("Error fetching initial pokemons:", error);
+    const fetchPokemons = async () => {
+      try {
+        const response = await axios.get(url);
+        const pokemonDetailsPromises = response.data.results.map((pokemon) =>
+          axios.get(pokemon.url)
+        );
+        const pokemonDetailsResponses = await Promise.all(
+          pokemonDetailsPromises
+        );
+        const pokemonDetails = pokemonDetailsResponses.map((response) => ({
+          id: response.data.id,
+          name: response.data.name,
+          imgSrc: response.data.sprites.front_default,
+          ability: response.data.abilities[0].ability.name,
+          weight: response.data.weight,
+        }));
+
+        dispatch({ type: "setPokemons", pokemons: pokemonDetails });
+        dispatch({ type: "setFilteredPokemons", pokemons: pokemonDetails });
+      } catch (e) {
+        setError("Error al obtener los pokemones");
+        console.log(e);
       }
     };
 
-    fetchData();
+    fetchPokemons();
   }, []);
 
-  const handleAddToFavourites = (pokemon) => {
-    dispatch({ type: actionTypes.ADD_TO_FAVOURITES, payload: pokemon });
-  };
-
-  const handleDeleteFromFavourites = (pokemon) => {
-    dispatch({ type: actionTypes.DELETE_FROM_FAVOURITES, payload: pokemon });
-  };
-
-  const handleEditPokemon = (newPokemon) => {
-    dispatch({ type: actionTypes.EDIT_POKEMON, payload: newPokemon });
-    localStorage.setItem("pokemon", JSON.stringify({ results: state.pokemons }));
-  };
-
-  const handleFilterChange = (filtered) => {
-    dispatch({ type: actionTypes.FILTER_POKEMONS, payload: filtered });
-  };
-
   return (
-    <FavouritesContext.Provider
-      value={{
-        favourites: state.favourites,
-        pokemons: state.pokemons,
-        filteredPokemons: state.filteredPokemons,
-        handleAddToFavourites,
-        handleDeleteFromFavourites,
-        handleEditPokemon,
-        handleFilterChange
-      }}
-    >
+    <PokemonContext.Provider value={{ state, dispatch, error }}>
       {children}
-    </FavouritesContext.Provider>
-  );
+    </PokemonContext.Provider>
+  )
 };
 
-export const useFavourites = () => {
-  return useContext(FavouritesContext);
-};
+export {PokemonContext,PokemonProvider}
+

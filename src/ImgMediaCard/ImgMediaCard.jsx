@@ -8,58 +8,51 @@ import { useState } from "react";
 import { IconButton, TextField } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
-import { useFavourites } from "../context/favouriteContext";
-import styles from "./imgMediaCard.module.css";
+import { useContext } from "react";
+import { PokemonContext } from "../context/favouriteContext";
 
-export default function ImgMediaCard({ pokemon, isFavourite }) {
+export default function ImgMediaCard({
+  pokemon, isFavourite 
+}) {
   const [showModifyOptions, setShowModifyOptions] = useState(false);
   const [inputChangedname, setInputChangedname] = useState(pokemon.name);
-  const {
-    handleEditPokemon,
-    handleDeleteFromFavourites,
-    handleAddToFavourites,
-  } = useFavourites();
+  const { state, dispatch } = useContext(PokemonContext);
+
+  const handleEditPokemon = (newPokemon) => {
+    dispatch({ type: "editPokemon", pokemon: newPokemon });
+  };
+
+  const handleAddToFavourites = (pokemon) => {
+    dispatch({ type: "addToFavourites", pokemon: pokemon });
+  };
+  
 
   const handleChangeNameClick = () => {
     const newPokemon = {
       id: pokemon.id,
-      name: inputChangedname,
+      name: inputChangedname ,
       imgSrc: pokemon.imgSrc,
       ability: pokemon.ability,
       weight: pokemon.weight,
     };
     handleEditPokemon(newPokemon);
     setShowModifyOptions(false);
+    
   };
-
   const handleCancel = () => {
     setInputChangedname(pokemon.name);
     setShowModifyOptions(false);
   };
-
-  const handleAddToFavourite = (pokemon) => {
-    handleAddToFavourites(pokemon);
-  };
-
-  const handleAddOrRemoveFromFavourites = () => {
-    !isFavourite
-      ? handleAddToFavourites(pokemon)
-      : handleDeleteFromFavourites(pokemon);
-  };
-
+ 
   return (
     <Card sx={{ width: 200, margin: 2 }}>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <CardMedia
-          component="img"
-          alt={`${pokemon.name} img`}
-          height="140"
-          image={pokemon.imgSrc}
-        />
-      </div>
-
-      {/* Aplicando Flexbox a CardContent para centrar todo el contenido */}
-      <CardContent sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+      <CardMedia
+        component="img"
+        alt={`${name} img`}
+        height="140"
+        image={pokemon.imgSrc}
+      />
+      <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {inputChangedname || pokemon.name}
         </Typography>
@@ -69,34 +62,31 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
         <Typography variant="body2" color="text.secondary">
           Weight: {pokemon.weight}
         </Typography>
-
-        <div
-          className={showModifyOptions ? styles.cardWithTextfield : styles.card}
-        >
-          {showModifyOptions && (
-            <div className={styles.modifyOptions}>
-              <TextField
-                label="Nuevo nombre"
-                value={inputChangedname}
-                onChange={(e) => setInputChangedname(e.target.value)}
-              />
-              <Button onClick={handleChangeNameClick}>Guardar</Button>
-              <Button onClick={handleCancel}>Cancelar</Button>
-            </div>
-          )}
-        </div>
+        {showModifyOptions && (
+          <div>
+            <TextField
+              label="Nuevo nombre"
+              value={inputChangedname}
+              onChange={(e) => setInputChangedname(e.target.value)}
+            />
+            <Button onClick={handleChangeNameClick}>Guardar</Button>
+            <Button onClick={handleCancel}>Cancelar</Button>
+          </div>
+        )}
       </CardContent>
-
-      {!showModifyOptions&&(<div style={{ display: "flex", justifyContent: "center" }}>
-        <CardActions>
-          <IconButton onClick={handleAddOrRemoveFromFavourites}>
-            {isFavourite ? <StarIcon /> : <StarBorderIcon />}
-          </IconButton>
-          <Button size="small" onClick={() => setShowModifyOptions(true)}>
-            Change name
-          </Button>
-        </CardActions>
-      </div>)}
+      <CardActions>
+        <IconButton onClick={() => handleAddToFavourites(pokemon)}>
+        {isFavourite ? <StarIcon /> : <StarBorderIcon />}
+        </IconButton>
+        <Button
+          size="small"
+          onClick={() => {
+            setShowModifyOptions(true);
+          }}
+        >
+          Change name
+        </Button>
+      </CardActions>
     </Card>
   );
 }

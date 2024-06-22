@@ -6,15 +6,15 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-import { useFavourites } from "../context/favouriteContext";
-import styles from "./Favourites.module.css";
+import { PokemonContext } from "../context/favouriteContext";
+import { useContext } from "react";
 
 export default function Favourites() {
-  const { favourites, handleDeleteFromFavourites } = useFavourites();
+  const { state, dispatch } = useContext(PokemonContext);
 
   return (
-    <div className={styles.cardContainer}>
-      {favourites.map((pokemon) => (
+    <>
+      {state.favourites.map((pokemon) => (
         <Card sx={{ width: 200, margin: 2 }} key={pokemon.id}>
           <CardMedia
             component="img"
@@ -36,13 +36,15 @@ export default function Favourites() {
           <CardActions>
             <Button
               size="small"
-              onClick={() => handleDeleteFromFavourites(pokemon)}
+              onClick={() =>
+                dispatch({ type: "deleteFromFavourites", pokemon: pokemon })
+              }
             >
               Eliminar de Favoritos
             </Button>
           </CardActions>
         </Card>
       ))}
-    </div>
+    </>
   );
 }

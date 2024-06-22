@@ -5,7 +5,7 @@ import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorPage from './error-page.jsx';
 import Favourites from './Favourites/Favourites.jsx';
-import { FavouritesProvider } from './context/favouriteContext.jsx';
+import { PokemonProvider } from './context/favouriteContext.jsx';
 import Layout from './Layout.jsx';
 
 const router = createBrowserRouter([
@@ -28,8 +28,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <FavouritesProvider>
+    <PokemonProvider>
       <RouterProvider router={router} />
-    </FavouritesProvider>
+    </PokemonProvider>
   </React.StrictMode>,
 );

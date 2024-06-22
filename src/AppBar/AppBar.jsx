@@ -6,23 +6,23 @@ import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import HomeIcon from "@mui/icons-material/Home";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import { ThemeProvider } from '@mui/material/styles';
+// import { ThemeProvider } from '@mui/material/styles';
 import PikachuIcon from "./PikachuIcon";
 import styles from './AppBar.module.css';
-import { createTheme } from "@mui/material";
+// import { createTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 
-const theme = createTheme({
-  components: {
-    MuiAppBar: {
-      styleOverrides: {
-        root: {
-          backgroundColor: "red",
-        },
-      },
-    },
-  },
-});
+// const theme = createTheme({
+//   components: {
+//     MuiAppBar: {
+//       styleOverrides: {
+//         root: {
+//           backgroundColor: "red",
+//         },
+//       },
+//     },
+//   },
+// });
 
 export default function CustomAppBar() {
   const [isStarClicked, setIsStarClicked] = useState(false);
@@ -41,7 +41,7 @@ export default function CustomAppBar() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    // <ThemeProvider theme={theme}>
       <AppBar position="static">
         <Toolbar className={styles.toolbar}>
         <p></p>
@@ -60,6 +60,6 @@ export default function CustomAppBar() {
           </div>
         </Toolbar>
       </AppBar>
-    </ThemeProvider>
+    // </ThemeProvider>
   );
 }
