@@ -12,28 +12,29 @@ const pokemonsReducer = (state, action) => {
 
       if (!isPokemonInFavourites) {
         const nextFavourites = [...state.favourites, action.pokemon];
-        console.log(nextFavourites,"next favourites no estaba en favoritos")
+
+        localStorage.setItem("favourites", JSON.stringify(nextFavourites));
         return { ...state, favourites: nextFavourites };
-        
       } else {
         const newFavourites = state.favourites.filter(
           (p) => p.id !== action.pokemon.id
         );
-        console.log(newFavourites,"next favourites SI estaba en favoritos")
+
         return { ...state, favourites: newFavourites };
       }
-   
     }
     case "deleteFromFavourites": {
       const newFavourites = state.favourites.filter(
         (p) => p.id !== action.pokemon.id
       );
+      localStorage.setItem("favourites", JSON.stringify(newFavourites));
       return { ...state, favourites: newFavourites };
     }
     case "editPokemon": {
       const updatedPokemons = state.pokemons.map((pokemon) =>
         pokemon.id === action.pokemon.id ? action.pokemon : pokemon
       );
+      localStorage.setItem("pokemons", JSON.stringify(updatedPokemons));
       return {
         ...state,
         pokemons: updatedPokemons,
@@ -41,10 +42,10 @@ const pokemonsReducer = (state, action) => {
       };
     }
     case "setPokemons": {
+      localStorage.setItem("pokemons", JSON.stringify(action.pokemons));
       return {
         ...state,
         pokemons: action.pokemons,
-        
       };
     }
     case "setFilteredPokemons": {
@@ -60,11 +61,22 @@ const pokemonsReducer = (state, action) => {
 
 const PokemonProvider = ({ children }) => {
   const [state, dispatch] = useReducer(pokemonsReducer, {
-    pokemons: [],
-    filteredPokemons: [],
-    favourites: [],
+    pokemons: getPokemons(),
+    filteredPokemons: getPokemons(),
+    favourites: getFavourites(),
   });
   const [error, setError] = useState(null);
+
+  function getPokemons() {
+    const savedPokemons = localStorage.getItem("pokemons");
+
+    return savedPokemons ? JSON.parse(savedPokemons) : [];
+  }
+  function getFavourites() {
+    const savedFavourites = localStorage.getItem("favourites");
+
+    return savedFavourites ? JSON.parse(savedFavourites) : [];
+  }
 
   useEffect(() => {
     const url = "https://pokeapi.co/api/v2/pokemon";
@@ -86,8 +98,11 @@ const PokemonProvider = ({ children }) => {
           weight: response.data.weight,
         }));
 
-        dispatch({ type: "setPokemons", pokemons: pokemonDetails });
-        dispatch({ type: "setFilteredPokemons", pokemons: pokemonDetails });
+        if (state.pokemons.length === 0) {
+          console.log(state.pokemons, "state.pokemons");
+          dispatch({ type: "setPokemons", pokemons: pokemonDetails });
+          dispatch({ type: "setFilteredPokemons", pokemons: pokemonDetails });
+        }
       } catch (e) {
         setError("Error al obtener los pokemones");
         console.log(e);
@@ -101,8 +116,7 @@ const PokemonProvider = ({ children }) => {
     <PokemonContext.Provider value={{ state, dispatch, error }}>
       {children}
     </PokemonContext.Provider>
-  )
+  );
 };
 
-export {PokemonContext,PokemonProvider}
-
+export { PokemonContext, PokemonProvider };
