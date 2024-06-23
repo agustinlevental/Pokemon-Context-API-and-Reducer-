@@ -51,7 +51,7 @@ const pokemonsReducer = (state, action) => {
     case "setFilteredPokemons": {
       return {
         ...state,
-        filteredPokemons: action.pokemons,
+        filteredPokemons: action.filteredPokemons, 
       };
     }
     default:
@@ -77,6 +77,7 @@ const PokemonProvider = ({ children }) => {
 
     return savedFavourites ? JSON.parse(savedFavourites) : [];
   }
+ 
 
   useEffect(() => {
     const url = "https://pokeapi.co/api/v2/pokemon";

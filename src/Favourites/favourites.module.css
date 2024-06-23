@@ -1,0 +1,30 @@
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    padding: 16px;
+  }
+  
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    width: 100%;
+  }
+  
+  .card {
+    flex: 1 1 calc(20% - 32px);
+    box-sizing: border-box;
+  }
+  
+  @media (max-width: 768px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+    .card {
+      flex: 1 1 100%;
+    }
+  }
+  

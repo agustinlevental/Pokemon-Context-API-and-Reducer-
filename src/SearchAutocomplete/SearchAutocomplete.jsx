@@ -5,12 +5,11 @@ import { PokemonContext } from "../context/favouriteContext";
 
 export default function SearchAutocomplete({ options }) {
   const [inputValue, setInputValue] = useState("");
-  const { state, dispatch } = useContext(PokemonContext)
+  const { dispatch } = useContext(PokemonContext);
 
   const handleFilterChange = (filtered) => {
     dispatch({ type: "setFilteredPokemons", filteredPokemons: filtered });
-  };;
-
+  };
 
   const handleInputChange = (event, newInputValue) => {
     setInputValue(newInputValue);
