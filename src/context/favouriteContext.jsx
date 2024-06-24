@@ -97,10 +97,11 @@ const PokemonProvider = ({ children }) => {
           imgSrc: response.data.sprites.front_default,
           ability: response.data.abilities[0].ability.name,
           weight: response.data.weight,
+          type: response.data.types[0].type.name
         }));
 
         if (state.pokemons.length === 0) {
-          console.log(state.pokemons, "state.pokemons");
+       
           dispatch({ type: "setPokemons", pokemons: pokemonDetails });
           dispatch({ type: "setFilteredPokemons", pokemons: pokemonDetails });
         }

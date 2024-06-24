@@ -42,19 +42,19 @@ export default function CustomAppBar() {
 
   return (
     // <ThemeProvider theme={theme}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{backgroundColor:"wheat"}}>
         <Toolbar className={styles.toolbar}>
         <p></p>
           <PikachuIcon className={styles.pikachuIcon} />
           <div className={styles.iconButtonGroup}>
           <Link to="favourites">
               <IconButton color="inherit" onClick={handleStarClick}>
-                {isStarClicked ? <StarIcon /> : <StarBorderIcon />}
+                {isStarClicked ? <StarIcon sx={{color:"grey"}}/> : <StarBorderIcon sx={{color:"grey"}} />}
               </IconButton>
             </Link>
             <Link to="home">
               <IconButton color="inherit" onClick={handleHomeClick}>
-                {isHomeClicked ? <HomeIcon /> : <HomeOutlinedIcon />}
+                {isHomeClicked ? <HomeIcon  sx={{color:"grey"}}/> : <HomeOutlinedIcon sx={{color:"grey"}} />}
               </IconButton>
             </Link>
           </div>

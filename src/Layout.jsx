@@ -4,7 +4,7 @@ import CustomAppBar from './AppBar/AppBar';
 
 export default function Layout() {
   return (
-    <div>
+    <div >
       <CustomAppBar />
       <main>
         <Outlet />

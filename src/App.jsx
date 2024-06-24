@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import { useContext } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import SearchAutocomplete from "./SearchAutocomplete/SearchAutocomplete";
@@ -9,7 +9,6 @@ import styles from "./app.module.css";
 export default function App() {
   const { state } = useContext(PokemonContext);
 
-  
   return (
     <Box className={styles.container}>
       <Box className={styles.home}>
@@ -21,7 +20,9 @@ export default function App() {
               <ImgMediaCard
                 pokemon={pokemon}
                 id={pokemon.id}
-                isFavourite={state.favourites.some((fav) => fav.id === pokemon.id)}
+                isFavourite={state.favourites.some(
+                  (fav) => fav.id === pokemon.id
+                )}
               />
             </Box>
           ))}
