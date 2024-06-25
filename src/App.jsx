@@ -5,14 +5,19 @@ import SearchAutocomplete from "./SearchAutocomplete/SearchAutocomplete";
 import ImgMediaCard from "./ImgMediaCard/ImgMediaCard";
 import { PokemonContext } from "./context/favouriteContext";
 import styles from "./app.module.css";
+import { Button } from "@mui/material";
 
 export default function App() {
-  const { state } = useContext(PokemonContext);
+  const { state, dispatch } = useContext(PokemonContext);
+
+  const handleCleanSearch = () => {
+    dispatch({ type: "setFilteredPokemons", filteredPokemons: state.pokemons });
+  };
 
   return (
     <Box className={styles.container}>
       <Box className={styles.home}>
-        <SearchAutocomplete options={state.pokemons} />
+        <SearchAutocomplete />
         {state.error && <Typography color="error">{state.error}</Typography>}
         <Box className={styles.cards}>
           {state.filteredPokemons.map((pokemon) => (
@@ -27,6 +32,11 @@ export default function App() {
             </Box>
           ))}
         </Box>
+      </Box>
+      <Box>
+        {state.filteredPokemons.length === 1 && (
+          <Button onClick={handleCleanSearch}>Limpiar Búsqueda</Button>
+        )}
       </Box>
     </Box>
   );

@@ -15,17 +15,26 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
   const [showModifyOptions, setShowModifyOptions] = useState(false);
   const [inputChangedname, setInputChangedname] = useState(pokemon.name);
   const [backgroundColor, setBackgroundColor] = useState("#FFFFFF");
-  const [filteredPokemonName,setFilteredPokemonName]=useState("")
-
+  const [filteredPokemonName, setFilteredPokemonName] = useState("");
+  const [myPokemon, setMyPokemon] = useState({
+    id: pokemon.id,
+    name: pokemon.name,
+    imgSrc: pokemon?.sprites?.front_default || pokemon.imgSrc,
+    ability: pokemon?.abilities?.[0]?.ability?.name,
+    type: pokemon?.types?.[0]?.type?.name,
+    weight: pokemon.weight,
+  });
 
   const { state, dispatch } = useContext(PokemonContext);
 
-  useEffect(()=>{
+  useEffect(() => {
+    state.filteredPokemons.map((filteredPokemon) => {
+      if (filteredPokemon.id === myPokemon.id) {
+        setFilteredPokemonName(filteredPokemon.name);
+      }
+    });
+  }, [state.filteredPokemons]);
 
-   state.filteredPokemons.map(filteredPokemon=>{if(filteredPokemon.id===pokemon.id){
-    setFilteredPokemonName(filteredPokemon.name)
-   }})
-  },[state.filteredPokemons])
   const typeColors = {
     normal: "#A8A878",
     fire: "#F08030",
@@ -48,10 +57,12 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
   };
 
   useEffect(() => {
-    if (pokemon) {
-      setBackgroundColor(typeColors[pokemon.type || "#FFFFFF"]);
+    if (myPokemon) {
+      setBackgroundColor(
+        typeColors[pokemon.type || myPokemon.type || "#FFFFFF"]
+      );
     }
-  });
+  }, [myPokemon]);
   const handleEditPokemon = (newPokemon) => {
     dispatch({ type: "editPokemon", pokemon: newPokemon });
   };
@@ -62,18 +73,18 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
 
   const handleChangeNameClick = () => {
     const newPokemon = {
-      id: pokemon.id,
+      id: myPokemon.id,
       name: inputChangedname,
-      imgSrc: pokemon.imgSrc,
-      ability: pokemon.ability,
-      weight: pokemon.weight,
-      type: pokemon.type,
+      imgSrc: myPokemon.imgSrc,
+      ability: myPokemon.ability,
+      weight: myPokemon.weight,
+      type: myPokemon.type,
     };
     handleEditPokemon(newPokemon);
     setShowModifyOptions(false);
   };
   const handleCancel = () => {
-    setInputChangedname(pokemon.name);
+    setInputChangedname(myPokemon.name);
     setShowModifyOptions(false);
   };
 
@@ -83,15 +94,15 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
         width: 200,
         margin: 2,
         borderRadius: "10%",
-        backgroundColor: "#D3D3D3"
+        backgroundColor: "#D3D3D3",
       }}
     >
       <CardMedia
         component="img"
         alt={`${name} img`}
         height="140"
-        image={pokemon.imgSrc}
-        sx={{ backgroundColor: { backgroundColor },}}
+        image={myPokemon.imgSrc}
+        sx={{ backgroundColor: { backgroundColor } }}
       />
       <CardContent
         sx={{
@@ -103,13 +114,13 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
         }}
       >
         <Typography gutterBottom variant="h5" component="div">
-          {filteredPokemonName || pokemon.name}
+          {filteredPokemonName || myPokemon.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Ability: {pokemon.ability}
+          Ability: {myPokemon.ability}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Weight: {pokemon.weight}
+          Weight: {myPokemon.weight}
         </Typography>
         {showModifyOptions && (
           <div style={{ margin: "20px 0 0 0" }}>
@@ -134,7 +145,11 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
         }}
       >
         <IconButton onClick={() => handleAddToFavourites(pokemon)}>
-          {isFavourite ? <StarIcon sx={{color:"grey"}} /> : <StarBorderIcon />}
+          {isFavourite ? (
+            <StarIcon sx={{ color: "grey" }} />
+          ) : (
+            <StarBorderIcon />
+          )}
         </IconButton>
         <Button
           size="small"

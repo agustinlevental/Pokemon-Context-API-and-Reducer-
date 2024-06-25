@@ -114,8 +114,29 @@ const PokemonProvider = ({ children }) => {
     fetchPokemons();
   }, []);
 
+  const searchPokemon = async (pokemon) => {
+    const url = `https://pokeapi.co/api/v2/pokemon/${pokemon}`;
+    try {
+      const response = await axios.get(url);
+      console.log(response,"response")
+      const pokemonDetails = {
+        id: response.data.id,
+        name: response.data.name,
+        imgSrc: response.data.sprites.front_default,
+        ability: response.data.abilities[0].ability.name,
+        weight: response.data.weight,
+        type: response.data.types[0].type.name
+      }
+      console.log(pokemonDetails,"pokemonDetails")
+      dispatch({ type: "setFilteredPokemons", filteredPokemons: [pokemonDetails] });
+  }
+  catch (e) {
+    setError("Error al obtener los pokemones");
+    console.log(e);
+  }}
+
   return (
-    <PokemonContext.Provider value={{ state, dispatch, error }}>
+    <PokemonContext.Provider value={{ state, dispatch, error, searchPokemon }}>
       {children}
     </PokemonContext.Provider>
   );
