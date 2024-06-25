@@ -5,7 +5,7 @@ import SearchAutocomplete from "./SearchAutocomplete/SearchAutocomplete";
 import ImgMediaCard from "./ImgMediaCard/ImgMediaCard";
 import { PokemonContext } from "./context/favouriteContext";
 import styles from "./app.module.css";
-import { Button } from "@mui/material";
+import CustomButton from "./CustomButton/CustomButton";
 
 export default function App() {
   const { state, dispatch , handlePaginationClick} = useContext(PokemonContext);
@@ -35,12 +35,12 @@ export default function App() {
       </Box>
       <Box>
         {state.filteredPokemons.length === 1 && (
-          <Button onClick={handleCleanSearch}>Limpiar Búsqueda</Button>
+          <CustomButton  name ={"Limpiar Búsqueda"} onClick={handleCleanSearch}/>
         )}
       </Box>
-      <Box>
-        <Button onClick={() => handlePaginationClick(state.previousURL)} disabled={!state.previousURL}>Anterior</Button>
-        <Button onClick={() => handlePaginationClick(state.nextURL)}>Siguiente</Button>
+      <Box sx={{display:"flex", justifyContent:"space-between", width:"20%"}}>
+        <CustomButton name={"Anterior"} onClick={() => handlePaginationClick(state.previousURL)} disabled={!state.previousURL}>Anterior</CustomButton>
+        <CustomButton name={"Siguiente"} onClick={() => handlePaginationClick(state.nextURL)}/>
       </Box>
     </Box>
   );

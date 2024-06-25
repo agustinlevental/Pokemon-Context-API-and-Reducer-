@@ -2,6 +2,7 @@ import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { useContext } from "react";
 import { PokemonContext } from "../context/favouriteContext";
+import CustomButton from "../CustomButton/CustomButton";
 
 export default function SearchAutocomplete() {
   const [inputValue, setInputValue] = useState("");
@@ -16,14 +17,14 @@ export default function SearchAutocomplete() {
     }
   };
   return (
-    <div>
+    <div style={{display:"flex",alignItems:"center", width:"30%", justifyContent:"space-between"}}>
       <TextField
         label="Pokemon"
         variant="outlined"
         sx={{ width: 300 }}
         onChange={handleInputChange}
       />
-      <Button onClick={handleSearch}>Buscar</Button>
+      <CustomButton name={"Buscar"} onClick={handleSearch}/>
     </div>
   );
 }

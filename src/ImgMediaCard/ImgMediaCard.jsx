@@ -10,6 +10,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import { useContext } from "react";
 import { PokemonContext } from "../context/favouriteContext";
+import CustomButton from "../CustomButton/CustomButton";
 
 export default function ImgMediaCard({ pokemon, isFavourite }) {
   const [showModifyOptions, setShowModifyOptions] = useState(false);
@@ -57,15 +58,13 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
   };
 
   useEffect(() => {
-    if (myPokemon) {
+ if(state.filteredPokemons){
       setBackgroundColor(
         typeColors[pokemon.type || myPokemon.type || "#FFFFFF"]
-      );
-    }
-  }, [myPokemon]);
-  const handleEditPokemon = (newPokemon) => {
-    dispatch({ type: "editPokemon", pokemon: newPokemon });
-  };
+      );}
+    
+  }, [state.filteredPokemons]);
+ 
 
   const handleAddToFavourites = (pokemon) => {
     dispatch({ type: "addToFavourites", pokemon: pokemon });
@@ -80,7 +79,7 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
       weight: myPokemon.weight,
       type: myPokemon.type,
     };
-    handleEditPokemon(newPokemon);
+    dispatch({ type: "editPokemon", pokemon: newPokemon });
     setShowModifyOptions(false);
   };
   const handleCancel = () => {
@@ -130,8 +129,8 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
               onChange={(e) => setInputChangedname(e.target.value)}
             />
             <div style={{ display: "flex" }}>
-              <Button onClick={handleChangeNameClick}>Guardar</Button>
-              <Button onClick={handleCancel}>Cancelar</Button>
+              <CustomButton  name ={"Guardar"} onClick={handleChangeNameClick}/>
+              <CustomButton name={"Cancelar"} onClick={handleCancel}/>
             </div>
           </div>
         )}
@@ -151,14 +150,15 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
             <StarBorderIcon />
           )}
         </IconButton>
-        <Button
+        <CustomButton
           size="small"
           onClick={() => {
             setShowModifyOptions(true);
           }}
-        >
-          Change name
-        </Button>
+          name={"Change name"}
+        />
+          
+        
       </CardActions>
     </Card>
   );
