@@ -51,9 +51,19 @@ const pokemonsReducer = (state, action) => {
     case "setFilteredPokemons": {
       return {
         ...state,
-        filteredPokemons: action.filteredPokemons, 
+        filteredPokemons: action.filteredPokemons,
       };
     }
+    case "setPreviousURL":
+      return {
+        ...state,
+        previousURL: action.previousURL,
+      };
+    case "setNextURL":
+      return {
+        ...state,
+        nextURL: action.nextURL,
+      };
     default:
       return state;
   }
@@ -64,6 +74,8 @@ const PokemonProvider = ({ children }) => {
     pokemons: getPokemons(),
     filteredPokemons: getPokemons(),
     favourites: getFavourites(),
+    previousURL: "",
+    nextURL: "",
   });
   const [error, setError] = useState(null);
 
@@ -77,7 +89,6 @@ const PokemonProvider = ({ children }) => {
 
     return savedFavourites ? JSON.parse(savedFavourites) : [];
   }
- 
 
   useEffect(() => {
     const url = "https://pokeapi.co/api/v2/pokemon";
@@ -97,14 +108,18 @@ const PokemonProvider = ({ children }) => {
           imgSrc: response.data.sprites.front_default,
           ability: response.data.abilities[0].ability.name,
           weight: response.data.weight,
-          type: response.data.types[0].type.name
+          type: response.data.types[0].type.name,
         }));
 
         if (state.pokemons.length === 0) {
-       
           dispatch({ type: "setPokemons", pokemons: pokemonDetails });
           dispatch({ type: "setFilteredPokemons", pokemons: pokemonDetails });
         }
+        dispatch({
+          type: "setPreviousURL",
+          previousURL: response.data.previous,
+        });
+        dispatch({ type: "setNextURL", nextURL: response.data.next });
       } catch (e) {
         setError("Error al obtener los pokemones");
         console.log(e);
@@ -118,25 +133,60 @@ const PokemonProvider = ({ children }) => {
     const url = `https://pokeapi.co/api/v2/pokemon/${pokemon}`;
     try {
       const response = await axios.get(url);
-      console.log(response,"response")
+
       const pokemonDetails = {
         id: response.data.id,
         name: response.data.name,
         imgSrc: response.data.sprites.front_default,
         ability: response.data.abilities[0].ability.name,
         weight: response.data.weight,
-        type: response.data.types[0].type.name
-      }
-      console.log(pokemonDetails,"pokemonDetails")
-      dispatch({ type: "setFilteredPokemons", filteredPokemons: [pokemonDetails] });
-  }
-  catch (e) {
-    setError("Error al obtener los pokemones");
-    console.log(e);
-  }}
+        type: response.data.types[0].type.name,
+      };
+
+      dispatch({
+        type: "setFilteredPokemons",
+        filteredPokemons: [pokemonDetails],
+      });
+    } catch (e) {
+      setError("Error al obtener los pokemones");
+      console.log(e);
+    }
+  };
+
+  const handlePaginationClick = async (url) => {
+    if (!url) return;
+
+    try {
+      const response = await axios.get(url);
+      const pokemonDetailsPromises = response.data.results.map((pokemon) =>
+        axios.get(pokemon.url)
+      );
+      const pokemonDetailsResponses = await Promise.all(pokemonDetailsPromises);
+      const pokemonDetails = pokemonDetailsResponses.map((response) => ({
+        id: response.data.id,
+        name: response.data.name,
+        imgSrc: response.data.sprites.front_default,
+        ability: response.data.abilities[0].ability.name,
+        weight: response.data.weight,
+        type: response.data.types[0].type.name,
+      }));
+
+      dispatch({
+        type: "setFilteredPokemons",
+        filteredPokemons: pokemonDetails,
+      });
+      dispatch({ type: "setPreviousURL", previousURL: response.data.previous });
+      dispatch({ type: "setNextURL", nextURL: response.data.next });
+    } catch (e) {
+      setError("Error al obtener los pokemones");
+      console.log(e);
+    }
+  };
 
   return (
-    <PokemonContext.Provider value={{ state, dispatch, error, searchPokemon }}>
+    <PokemonContext.Provider
+      value={{ state, dispatch, error, searchPokemon, handlePaginationClick }}
+    >
       {children}
     </PokemonContext.Provider>
   );

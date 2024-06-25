@@ -8,7 +8,7 @@ import styles from "./app.module.css";
 import { Button } from "@mui/material";
 
 export default function App() {
-  const { state, dispatch } = useContext(PokemonContext);
+  const { state, dispatch , handlePaginationClick} = useContext(PokemonContext);
 
   const handleCleanSearch = () => {
     dispatch({ type: "setFilteredPokemons", filteredPokemons: state.pokemons });
@@ -37,6 +37,10 @@ export default function App() {
         {state.filteredPokemons.length === 1 && (
           <Button onClick={handleCleanSearch}>Limpiar Búsqueda</Button>
         )}
+      </Box>
+      <Box>
+        <Button onClick={() => handlePaginationClick(state.previousURL)} disabled={!state.previousURL}>Anterior</Button>
+        <Button onClick={() => handlePaginationClick(state.nextURL)}>Siguiente</Button>
       </Box>
     </Box>
   );
