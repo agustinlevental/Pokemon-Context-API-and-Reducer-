@@ -5,8 +5,8 @@ import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorPage from './error-page.jsx';
 import Favourites from './Favourites/Favourites.jsx';
-import { PokemonProvider } from './context/favouriteContext.jsx';
 import Layout from './Layout.jsx';
+import { PokemonProvider } from './context/FavoriteContext.jsx';
 
 const router = createBrowserRouter([
   {

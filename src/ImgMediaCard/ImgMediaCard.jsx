@@ -2,19 +2,16 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { IconButton, TextField } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import { useContext } from "react";
-import { PokemonContext } from "../context/favouriteContext";
 import CustomButton from "../CustomButton/CustomButton";
+import { PokemonContext } from "../context/FavoriteContext";
 
 export default function ImgMediaCard({ pokemon, isFavourite }) {
-  const [showModifyOptions, setShowModifyOptions] = useState(false);
-  const [inputChangedname, setInputChangedname] = useState(pokemon.name);
   const [backgroundColor, setBackgroundColor] = useState("#FFFFFF");
   const [filteredPokemonName, setFilteredPokemonName] = useState("");
   const [myPokemon, setMyPokemon] = useState({
@@ -70,22 +67,8 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
     dispatch({ type: "addToFavourites", pokemon: pokemon });
   };
 
-  const handleChangeNameClick = () => {
-    const newPokemon = {
-      id: myPokemon.id,
-      name: inputChangedname,
-      imgSrc: myPokemon.imgSrc,
-      ability: myPokemon.ability,
-      weight: myPokemon.weight,
-      type: myPokemon.type,
-    };
-    dispatch({ type: "editPokemon", pokemon: newPokemon });
-    setShowModifyOptions(false);
-  };
-  const handleCancel = () => {
-    setInputChangedname(myPokemon.name);
-    setShowModifyOptions(false);
-  };
+
+ 
 
   return (
     <Card
@@ -121,19 +104,6 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
         <Typography variant="body2" color="text.secondary">
           Weight: {myPokemon.weight}
         </Typography>
-        {showModifyOptions && (
-          <div style={{ margin: "20px 0 0 0" }}>
-            <TextField
-              label="Nuevo nombre"
-              value={inputChangedname}
-              onChange={(e) => setInputChangedname(e.target.value)}
-            />
-            <div style={{ display: "flex" }}>
-              <CustomButton  name ={"Guardar"} onClick={handleChangeNameClick}/>
-              <CustomButton name={"Cancelar"} onClick={handleCancel}/>
-            </div>
-          </div>
-        )}
       </CardContent>
       <CardActions
         sx={{
@@ -150,13 +120,7 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
             <StarBorderIcon />
           )}
         </IconButton>
-        <CustomButton
-          size="small"
-          onClick={() => {
-            setShowModifyOptions(true);
-          }}
-          name={"Change name"}
-        />
+    
           
         
       </CardActions>

@@ -1,15 +1,7 @@
 import { useContext } from "react";
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Typography,
-} from "@mui/material";
-import { PokemonContext } from "../context/favouriteContext";
 import styles from "./favourites.module.css";
 import ImgMediaCard from "../ImgMediaCard/ImgMediaCard";
+import { PokemonContext } from "../context/FavoriteContext";
 
 export default function Favourites() {
   const { state, dispatch } = useContext(PokemonContext);
