@@ -9,7 +9,7 @@ import { Pagination } from "@mui/material";
 import { PokemonContext } from "./context/FavoriteContext";
 
 export default function App() {
-  const { state, dispatch, handlePaginationClick ,fetchPokemons} = useContext(PokemonContext);
+  const { state, dispatch ,fetchPokemons} = useContext(PokemonContext);
 
   const handleCleanSearch = () => {
     dispatch({ type: "setFilteredPokemons", filteredPokemons: state.pokemons });
@@ -47,22 +47,15 @@ export default function App() {
           <CustomButton name={"Limpiar Búsqueda"} onClick={handleCleanSearch} />
         )}
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "space-between", width: "20%" }}>
-        <Pagination
-          count={Math.ceil(state.totalPokemons / state.limit)}
-          page={state.page}
-          onChange={handlePageChange}
-          sx={{ backgroundColor: "gray" }}
-        />
-        <CustomButton
-          name={"Anterior"}
-          onClick={() => handlePaginationClick(state.previousURL)}
-          disabled={!state.previousURL}
-        >
-          Anterior
-        </CustomButton>
-        <CustomButton name={"Siguiente"} onClick={() => handlePaginationClick(state.nextURL)} />
-      </Box>
+      <Box sx={{ display: "flex", justifyContent: "center", width: "auto", padding: 0, margin: 0 }}>
+  <Pagination
+    count={Math.ceil(state.totalPokemons / state.limit)}
+    page={state.page}
+    onChange={handlePageChange}
+    color="primary" 
+    sx={{ margin: 0 }} 
+  />
+</Box>
     </Box>
   );
 }

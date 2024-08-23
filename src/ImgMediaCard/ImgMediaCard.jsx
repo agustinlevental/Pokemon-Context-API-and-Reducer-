@@ -76,7 +76,8 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
         width: 200,
         margin: 2,
         borderRadius: "10%",
-        backgroundColor: "#D3D3D3",
+        backgroundColor: "white",
+        boxShadow: 5,
       }}
     >
       <CardMedia
@@ -92,7 +93,7 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
           alignItems: "center",
           flexDirection: "column",
           paddingBottom: 0,
-          backgroundColor: "	#D3D3D3",
+          backgroundColor: "white",
         }}
       >
         <Typography gutterBottom variant="h5" component="div">
@@ -110,12 +111,12 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
           display: "flex",
           justifyContent: "center",
           paddingBottom: 0,
-          backgroundColor: "#D3D3D3",
+          backgroundColor: "white",
         }}
       >
         <IconButton onClick={() => handleAddToFavourites(pokemon)}>
           {isFavourite ? (
-            <StarIcon sx={{ color: "grey" }} />
+            <StarIcon sx={{ color: "#FFD700" }} />
           ) : (
             <StarBorderIcon />
           )}

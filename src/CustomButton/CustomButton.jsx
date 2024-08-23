@@ -6,7 +6,7 @@ const CustomButton = ({ name, onClick, disabled ,size,loading }) => {
   return (
     <Button
     variant="contained"
-    style={{ backgroundColor: "gray" }}
+ color="primary"
     onClick={onClick}
     disabled={disabled || loading} // Disable button while loading
     size={size}

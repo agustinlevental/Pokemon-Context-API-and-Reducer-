@@ -5,8 +5,8 @@ const PokemonContext = createContext();
 
 const pokemonsReducer = (state, action) => {
   switch (action.type) {
-    case "addToFavourites":
-      {const isPokemonInFavourites = state.favourites.some(
+    case "addToFavourites": {
+      const isPokemonInFavourites = state.favourites.some(
         (favPokemon) => favPokemon.id === action.pokemon.id
       );
 
@@ -20,17 +20,19 @@ const pokemonsReducer = (state, action) => {
         );
         localStorage.setItem("favourites", JSON.stringify(newFavourites));
         return { ...state, favourites: newFavourites };
-      }}
+      }
+    }
 
-    case "deleteFromFavourites":
-      {const newFavourites = state.favourites.filter(
+    case "deleteFromFavourites": {
+      const newFavourites = state.favourites.filter(
         (p) => p.id !== action.pokemon.id
       );
       localStorage.setItem("favourites", JSON.stringify(newFavourites));
-      return { ...state, favourites: newFavourites };}
+      return { ...state, favourites: newFavourites };
+    }
 
-    case "editPokemon":
-  {    const updatedPokemons = state.pokemons.map((pokemon) =>
+    case "editPokemon": {
+      const updatedPokemons = state.pokemons.map((pokemon) =>
         pokemon.id === action.pokemon.id ? action.pokemon : pokemon
       );
       localStorage.setItem("pokemons", JSON.stringify(updatedPokemons));
@@ -38,8 +40,9 @@ const pokemonsReducer = (state, action) => {
         ...state,
         pokemons: updatedPokemons,
         filteredPokemons: updatedPokemons,
-        localDataLoaded: true,  
-      };}
+        localDataLoaded: true,
+      };
+    }
 
     case "setPokemons":
       localStorage.setItem("pokemons", JSON.stringify(action.pokemons));
@@ -47,14 +50,14 @@ const pokemonsReducer = (state, action) => {
         ...state,
         pokemons: action.pokemons,
         filteredPokemons: action.pokemons,
-        localDataLoaded: true,  // Marcar como datos cargados localmente
+        localDataLoaded: true, // Marcar como datos cargados localmente
       };
 
     case "setFilteredPokemons":
       return {
         ...state,
         filteredPokemons: action.filteredPokemons,
-        localDataLoaded: true,  
+        localDataLoaded: true,
       };
 
     case "setPreviousURL":
@@ -73,7 +76,6 @@ const pokemonsReducer = (state, action) => {
       return {
         ...state,
         page: action.page,
-       
       };
 
     default:
@@ -107,7 +109,7 @@ const PokemonProvider = ({ children }) => {
 
   useEffect(() => {
     // if (!state.localDataLoaded) {
-      fetchPokemons(state.page );
+    fetchPokemons(state.page);
     // }
   }, [state.page]);
 
@@ -129,7 +131,6 @@ const PokemonProvider = ({ children }) => {
         type: response.data.types[0].type.name,
       }));
 
-      
       dispatch({ type: "setPokemons", pokemons: pokemonDetails });
       dispatch({
         type: "setPreviousURL",
@@ -142,17 +143,17 @@ const PokemonProvider = ({ children }) => {
     }
   };
   const searchPokemon = async (inputValue) => {
-  
-    const allPokemonData = [];
-    let url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=1118`; 
-    while (url) {
-      const response = await axios.get(url);
-      allPokemonData.push(...response.data.results);
-      url = response.data.next;
-    }
-  
- 
-    const pokemonDetailsPromises = allPokemonData.map((pokemon) => axios.get(pokemon.url));
+    
+    const offset = (state.page - 1) * state.limit;
+
+
+    let url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${state.limit}`;
+
+    const response = await axios.get(url);
+    const results = response.data.results;
+    const pokemonDetailsPromises = results.map((pokemon) =>
+      axios.get(pokemon.url)
+    );
     const pokemonDetailsResponses = await Promise.all(pokemonDetailsPromises);
     const allPokemons = pokemonDetailsResponses.map((response) => ({
       id: response.data.id,
@@ -162,12 +163,11 @@ const PokemonProvider = ({ children }) => {
       weight: response.data.weight,
       type: response.data.types[0].type.name,
     }));
-  
-   
+
     const filteredPokemons = allPokemons.filter((pokemon) =>
       pokemon.name.toLowerCase().includes(inputValue.toLowerCase())
     );
-  
+
     dispatch({ type: "setFilteredPokemons", filteredPokemons });
   };
   const handlePaginationClick = async (url) => {
@@ -187,7 +187,10 @@ const PokemonProvider = ({ children }) => {
         type: response.data.types[0].type.name,
       }));
 
-      dispatch({ type: "setFilteredPokemons", filteredPokemons: pokemonDetails });
+      dispatch({
+        type: "setFilteredPokemons",
+        filteredPokemons: pokemonDetails,
+      });
       dispatch({ type: "setPreviousURL", previousURL: response.data.previous });
       dispatch({ type: "setNextURL", nextURL: response.data.next });
     } catch (e) {
@@ -198,7 +201,14 @@ const PokemonProvider = ({ children }) => {
 
   return (
     <PokemonContext.Provider
-      value={{ state, dispatch, error, handlePaginationClick, fetchPokemons,searchPokemon }}
+      value={{
+        state,
+        dispatch,
+        error,
+        handlePaginationClick,
+        fetchPokemons,
+        searchPokemon,
+      }}
     >
       {children}
     </PokemonContext.Provider>
