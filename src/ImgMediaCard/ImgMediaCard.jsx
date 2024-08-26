@@ -66,6 +66,8 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
         showCancelButton: true,
         confirmButtonText: 'Crear usuario',
         cancelButtonText: 'Cancelar',
+        confirmButtonColor: "rgb(25, 118, 210)",
+        cancelButtonColor: "rgb(25, 118, 210)",
       }).then((result) => {
         if (result.isConfirmed) {
           setOpenCreateUserModal(true);

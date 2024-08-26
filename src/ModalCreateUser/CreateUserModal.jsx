@@ -57,7 +57,7 @@ export default function CreateUserModal({ open, onClose, onUserCreated }) {
   return (
     <Modal open={open} onClose={onClose}>
       <Box sx={{ width: 400, margin: 'auto', marginTop: '15%', padding: 3, backgroundColor: 'white', borderRadius: 2 }}>
-        <Typography variant="h6">Create User</Typography>
+        <h2>Create User</h2>
         <TextField
           fullWidth
           label="Name"
@@ -77,11 +77,16 @@ export default function CreateUserModal({ open, onClose, onUserCreated }) {
           margin="normal"
         />
         {ageError && <Typography sx={{ fontSize: '10px', color: 'red' }}>{ageError}</Typography>}
-
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button onClick={handleCreateUser} variant="contained" color="primary" sx={{ marginTop: "15px", width: "130px" }}>
+<div style={{ width:"100%", display: "flex", justifyContent: "flex-end" }}>
+        <div style={{ width:"70%", display: "flex", justifyContent: "space-between" }}>
+       
+          <Button onClick={handleCreateUser} variant="contained" color="primary" sx={{ marginTop: "15px",  }}>
             Create User
           </Button>
+          <Button onClick={onClose} variant="contained"   sx={{ marginTop: "15px", width: "130px" }}>
+           Cancel
+          </Button>
+        </div>
         </div>
       </Box>
     </Modal>
