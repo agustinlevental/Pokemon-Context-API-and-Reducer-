@@ -10,6 +10,7 @@ const CustomButton = ({ name, onClick, disabled ,size,loading }) => {
     onClick={onClick}
     disabled={disabled || loading} // Disable button while loading
     size={size}
+    sx={{width:"170px"}}
   >
     {loading ?  <CircularProgress /> : name}
   </Button>

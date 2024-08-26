@@ -5,23 +5,48 @@ const PokemonContext = createContext();
 
 const pokemonsReducer = (state, action) => {
   switch (action.type) {
-    case "addToFavourites": {
-      const isPokemonInFavourites = state.favourites.some(
-        (favPokemon) => favPokemon.id === action.pokemon.id
-      );
+    case "setUser":
+      return {
+        ...state,
+        user: action.user,
+      };
 
-      if (!isPokemonInFavourites) {
-        const nextFavourites = [...state.favourites, action.pokemon];
-        localStorage.setItem("favourites", JSON.stringify(nextFavourites));
-        return { ...state, favourites: nextFavourites };
-      } else {
-        const newFavourites = state.favourites.filter(
-          (p) => p.id !== action.pokemon.id
+    case "clearUser":
+      return {
+        ...state,
+        user: null,
+      };
+      case "addToFavourites": {
+        
+        const isPokemonInFavourites = state.user.favoritesPokemons.some(
+          (favPokemon) => favPokemon.id === action.pokemon.id
         );
-        localStorage.setItem("favourites", JSON.stringify(newFavourites));
-        return { ...state, favourites: newFavourites };
+      
+        let updatedFavorites;
+      
+        if (!isPokemonInFavourites) {
+     
+          updatedFavorites = [...state.user.favoritesPokemons, action.pokemon];
+        } else {
+  
+          updatedFavorites = state.user.favoritesPokemons.filter(
+            (p) => p.id !== action.pokemon.id
+          );
+        }
+      
+     
+        localStorage.setItem("favoritesPokemons", JSON.stringify(updatedFavorites));
+      
+    
+        return {
+          ...state,
+          user: {
+            ...state.user,
+            favoritesPokemons: updatedFavorites,
+          },
+        };
       }
-    }
+      
 
     case "deleteFromFavourites": {
       const newFavourites = state.favourites.filter(
@@ -85,6 +110,7 @@ const pokemonsReducer = (state, action) => {
 
 const PokemonProvider = ({ children }) => {
   const [state, dispatch] = useReducer(pokemonsReducer, {
+    user: null, 
     pokemons: getPokemons(),
     filteredPokemons: getPokemons(),
     favourites: getFavourites(),
@@ -96,6 +122,14 @@ const PokemonProvider = ({ children }) => {
     localDataLoaded: false,
   });
   const [error, setError] = useState(null);
+
+  const setUser = (user) => {
+    dispatch({ type: "setUser", user });
+  };
+  
+  const clearUser = () => {
+    dispatch({ type: "clearUser" });
+  };
 
   function getPokemons() {
     const savedPokemons = localStorage.getItem("pokemons");
@@ -144,20 +178,30 @@ const PokemonProvider = ({ children }) => {
   };
   const searchPokemon = async (inputValue) => {
     let url = `https://pokeapi.co/api/v2/pokemon/${inputValue}`;
-    const response = await axios.get(url);
-    const pokemon = response.data;
-    const objectPokemon = {
-      id: pokemon.id,
-      name: pokemon.name,
-      imgSrc: pokemon.sprites.front_default,
-      ability: pokemon.abilities[0].ability.name,
-      weight: pokemon.weight,
-      type: pokemon.types[0].type.name,
-    };
-
-    const filteredPokemons = [objectPokemon];
-
-    dispatch({ type: "setFilteredPokemons", filteredPokemons });
+  
+    try {
+      const response = await axios.get(url);
+      const pokemon = response.data;
+      const objectPokemon = {
+        id: pokemon.id,
+        name: pokemon.name,
+        imgSrc: pokemon.sprites.front_default,
+        ability: pokemon.abilities[0].ability.name,
+        weight: pokemon.weight,
+        type: pokemon.types[0].type.name,
+      };
+  
+      const filteredPokemons = [objectPokemon];
+  
+      dispatch({ type: "setFilteredPokemons", filteredPokemons });
+      return { success: true };
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        return { success: false, status: 404 };
+      } else {
+        return { success: false, status: error.response ? error.response.status : 500 };
+      }
+    }
   };
   const handlePaginationClick = async (url) => {
     if (!url) return;
@@ -197,6 +241,8 @@ const PokemonProvider = ({ children }) => {
         handlePaginationClick,
         fetchPokemons,
         searchPokemon,
+        setUser,       
+      clearUser,   
       }}
     >
       {children}

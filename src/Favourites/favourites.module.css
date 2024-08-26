@@ -19,6 +19,10 @@
     flex: 1 1 calc(20% - 32px);
     box-sizing: border-box;
   }
+  .title{
+    display: flex;
+    justify-content: center;
+  }
   
   @media (max-width: 768px) {
     .cards {

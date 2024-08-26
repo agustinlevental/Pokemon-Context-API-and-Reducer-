@@ -10,12 +10,16 @@ import StarIcon from "@mui/icons-material/Star";
 import { useContext } from "react";
 import CustomButton from "../CustomButton/CustomButton";
 import { PokemonContext } from "../context/FavoriteContext";
+import Swal from 'sweetalert2';
+import CreateUserModal from "../ModalCreateUser/CreateUserModal";
 
 export default function ImgMediaCard({ pokemon, isFavourite }) {
   const [backgroundColor, setBackgroundColor] = useState("#FFFFFF");
   const [filteredPokemonName, setFilteredPokemonName] = useState("");
+  const [openCreateUserModal, setOpenCreateUserModal] = useState(false);
 
-  const { state, dispatch } = useContext(PokemonContext);
+  const { state,setUser, dispatch } = useContext(PokemonContext);
+  const { user } = state;
 
   useEffect(() => {
     state.filteredPokemons.map((filteredPokemon) => {
@@ -56,11 +60,37 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
  
 
   const handleAddToFavourites = (pokemon) => {
-    dispatch({ type: "addToFavourites", pokemon: pokemon });
+    if (!user) {
+      Swal.fire({
+        title: 'Para agregar Pokemons a favoritos debe tener un usuario, ¿desea crear un usuario?',
+        showCancelButton: true,
+        confirmButtonText: 'Crear usuario',
+        cancelButtonText: 'Cancelar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setOpenCreateUserModal(true);
+        }  });
+      }else{
+        dispatch({ type: "addToFavourites", pokemon: pokemon });
+      }
+    
   };
-
+  const handleUserCreated = (user) => {
+    setUser(user);
+    console.log("user", user)
+    handleClose();
+  };
+const handleClose=()=>{
+  setOpenCreateUserModal(false)
+}
 
   return (
+    <div>
+    <CreateUserModal
+        open={openCreateUserModal}
+        onClose={handleClose}
+        onUserCreated={handleUserCreated}
+      />
     <Card
       sx={{
         width: 200,
@@ -116,5 +146,6 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
         
       </CardActions>
     </Card>
+    </div>
   );
 }
