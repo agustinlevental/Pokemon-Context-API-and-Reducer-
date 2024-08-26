@@ -50,6 +50,7 @@ export default function SearchAutocomplete() {
 
   const handleCleanSearch = () => {
     dispatch({ type: "setFilteredPokemons", filteredPokemons: state.pokemons });
+    setInputValue("")
   };
 
   return (

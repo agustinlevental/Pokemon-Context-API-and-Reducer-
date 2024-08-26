@@ -26,14 +26,14 @@ export const User = ({ userId }) => {
     if (!user) return <div>Cargando usuario...</div>;
 
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', paddingLeft:"30px" }}>
-            <Card sx={{ width: '12%', borderRadius: 2, boxShadow: 3 }}>
+        <Box sx={{  display: 'flex',justifyContent: 'flex-start', alignItems: 'center', paddingLeft:"30px" }}>
+            <Card sx={{ width: 'auto', borderRadius: 2, boxShadow: 3 }}>
                 <CardContent>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center',justifyContent:"space-between" }}>
-                        <Avatar sx={{ width: 100, height: 100}}>
-                            <PersonIcon sx={{ fontSize: 60 }} />
+                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center',justifyContent:"space-around" }}>
+                        <Avatar sx={{ width: "auto", height: "auto"}}>
+                            <PersonIcon sx={{ fontSize: 100 }} />
                         </Avatar>
-                        <div style={{display: "flex", flexDirection: "column"}}>
+                        <div style={{display: "flex", flexDirection: "column", marginLeft:"10px"}}>
                         <Typography variant="h5" component="div" sx={{ fontWeight: 'bold' }}>
                             {user.name}
                         </Typography>

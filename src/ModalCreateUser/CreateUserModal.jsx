@@ -1,28 +1,52 @@
-import  { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Modal, Box, TextField, Button, Typography } from '@mui/material';
 import axios from 'axios';
-      import Swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 export default function CreateUserModal({ open, onClose, onUserCreated }) {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [ageError, setAgeError] = useState('');
 
-  
+  const validateName = (name) => {
+    if (!/^[A-Za-z]{3,}$/.test(name)) {
+      setNameError('Name must contain at least 3 letters and no spaces.');
+      return false;
+    }
+    setNameError('');
+    return true;
+  };
+
+  const validateAge = (age) => {
+    const ageNumber = parseInt(age);
+    if (!/^\d+$/.test(age) || ageNumber < 18 || ageNumber > 99) {
+      setAgeError('Age must be a number between 18 and 99.');
+      return false;
+    }
+    setAgeError('');
+    return true;
+  };
 
   const handleCreateUser = async () => {
+    const isNameValid = validateName(name);
+    const isAgeValid = validateAge(age);
+
+    if (!isNameValid || !isAgeValid) {
+      return;
+    }
+
     try {
       const response = await axios.post('https://localhost:44337/api/User', {
-        
         name,
         age: parseInt(age),
         favoritesPokemons: []
       });
-      onUserCreated(response.data); 
-   
+      onUserCreated(response.data);
       onClose();
       Swal.fire({
         title: "Good job!",
-        text: "Ya puedes agregar pokemones a favoritos",
+        text: "You can now add favorite Pokémon",
         icon: "success"
       });
     } catch (error) {
@@ -31,30 +55,33 @@ export default function CreateUserModal({ open, onClose, onUserCreated }) {
   };
 
   return (
-
     <Modal open={open} onClose={onClose}>
       <Box sx={{ width: 400, margin: 'auto', marginTop: '15%', padding: 3, backgroundColor: 'white', borderRadius: 2 }}>
-        <h2 style={{color:"black", display:"flex", justifyContent:"center"}}>Create User</h2>
+        <Typography variant="h6">Create User</Typography>
         <TextField
           fullWidth
           label="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          onBlur={() => validateName(name)}
           margin="normal"
         />
-      
+        {nameError && <Typography sx={{ fontSize: '10px', color: 'red' }}>{nameError}</Typography>}
+        
         <TextField
           fullWidth
           label="Age"
           value={age}
           onChange={(e) => setAge(e.target.value)}
-        
+          onBlur={() => validateAge(age)}
           margin="normal"
         />
-        <div style={{display:"flex", justifyContent:"flex-end"}}>
-        <Button onClick={handleCreateUser} variant="contained" color="primary" fullWidth sx={{marginTop:"15px" ,width:"130px"}}>
-          Create User
-        </Button>
+        {ageError && <Typography sx={{ fontSize: '10px', color: 'red' }}>{ageError}</Typography>}
+
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button onClick={handleCreateUser} variant="contained" color="primary" sx={{ marginTop: "15px", width: "130px" }}>
+            Create User
+          </Button>
         </div>
       </Box>
     </Modal>
