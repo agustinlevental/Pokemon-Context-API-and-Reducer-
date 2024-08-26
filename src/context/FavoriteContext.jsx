@@ -143,30 +143,19 @@ const PokemonProvider = ({ children }) => {
     }
   };
   const searchPokemon = async (inputValue) => {
-    
-    const offset = (state.page - 1) * state.limit;
-
-
-    let url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${state.limit}`;
-
+    let url = `https://pokeapi.co/api/v2/pokemon/${inputValue}`;
     const response = await axios.get(url);
-    const results = response.data.results;
-    const pokemonDetailsPromises = results.map((pokemon) =>
-      axios.get(pokemon.url)
-    );
-    const pokemonDetailsResponses = await Promise.all(pokemonDetailsPromises);
-    const allPokemons = pokemonDetailsResponses.map((response) => ({
-      id: response.data.id,
-      name: response.data.name,
-      imgSrc: response.data.sprites.front_default,
-      ability: response.data.abilities[0].ability.name,
-      weight: response.data.weight,
-      type: response.data.types[0].type.name,
-    }));
+    const pokemon = response.data;
+    const objectPokemon = {
+      id: pokemon.id,
+      name: pokemon.name,
+      imgSrc: pokemon.sprites.front_default,
+      ability: pokemon.abilities[0].ability.name,
+      weight: pokemon.weight,
+      type: pokemon.types[0].type.name,
+    };
 
-    const filteredPokemons = allPokemons.filter((pokemon) =>
-      pokemon.name.toLowerCase().includes(inputValue.toLowerCase())
-    );
+    const filteredPokemons = [objectPokemon];
 
     dispatch({ type: "setFilteredPokemons", filteredPokemons });
   };

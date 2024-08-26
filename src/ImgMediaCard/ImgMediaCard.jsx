@@ -14,20 +14,12 @@ import { PokemonContext } from "../context/FavoriteContext";
 export default function ImgMediaCard({ pokemon, isFavourite }) {
   const [backgroundColor, setBackgroundColor] = useState("#FFFFFF");
   const [filteredPokemonName, setFilteredPokemonName] = useState("");
-  const [myPokemon, setMyPokemon] = useState({
-    id: pokemon.id,
-    name: pokemon.name,
-    imgSrc: pokemon?.sprites?.front_default || pokemon.imgSrc,
-    ability: pokemon?.abilities?.[0]?.ability?.name,
-    type: pokemon?.types?.[0]?.type?.name,
-    weight: pokemon.weight,
-  });
 
   const { state, dispatch } = useContext(PokemonContext);
 
   useEffect(() => {
     state.filteredPokemons.map((filteredPokemon) => {
-      if (filteredPokemon.id === myPokemon.id) {
+      if (filteredPokemon.id === pokemon.id) {
         setFilteredPokemonName(filteredPokemon.name);
       }
     });
@@ -57,7 +49,7 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
   useEffect(() => {
  if(state.filteredPokemons){
       setBackgroundColor(
-        typeColors[pokemon.type || myPokemon.type || "#FFFFFF"]
+        typeColors[pokemon.type]
       );}
     
   }, [state.filteredPokemons]);
@@ -67,8 +59,6 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
     dispatch({ type: "addToFavourites", pokemon: pokemon });
   };
 
-
- 
 
   return (
     <Card
@@ -82,9 +72,9 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
     >
       <CardMedia
         component="img"
-        alt={`${name} img`}
+        alt={`${pokemon.name} img`}
         height="140"
-        image={myPokemon.imgSrc}
+        image={pokemon.imgSrc}
         sx={{ backgroundColor: { backgroundColor } }}
       />
       <CardContent
@@ -97,13 +87,13 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
         }}
       >
         <Typography gutterBottom variant="h5" component="div">
-          {filteredPokemonName || myPokemon.name}
+          {filteredPokemonName || pokemon.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Ability: {myPokemon.ability}
+          Ability: {pokemon.ability}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Weight: {myPokemon.weight}
+          Weight: {pokemon.weight}
         </Typography>
       </CardContent>
       <CardActions
