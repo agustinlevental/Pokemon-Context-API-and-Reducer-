@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Modal, Box, TextField, Button, Typography } from '@mui/material';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import styles from "./createUserModal.module.css"
 
 export default function CreateUserModal({ open, onClose, onUserCreated,user }) {
   const [name, setName] = useState('');
@@ -37,7 +38,7 @@ export default function CreateUserModal({ open, onClose, onUserCreated,user }) {
     }
 
     try {
-      const response = await axios.post('https://localhost:44337/api/User', {
+      const response = await axios.post('http://leventalpokeapi.somee.com/api/User', {
         name,
         age: parseInt(age),
         favoritesPokemons: []
@@ -77,8 +78,8 @@ export default function CreateUserModal({ open, onClose, onUserCreated,user }) {
           margin="normal"
         />
         {ageError && <Typography sx={{ fontSize: '10px', color: 'red' }}>{ageError}</Typography>}
-<div style={{ width:"100%", display: "flex", justifyContent: "flex-end" }}>
-        <div style={{ width:"70%", display: "flex", justifyContent: "space-between" }}>
+<div className={styles.flexEnd}>
+        <div className={styles.buttonsContainer}>
        
           <Button onClick={handleCreateUser} variant="contained" color="primary" sx={{ marginTop: "15px",  }}>
             Create User

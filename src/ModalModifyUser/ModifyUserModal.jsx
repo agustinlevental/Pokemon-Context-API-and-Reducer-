@@ -3,7 +3,7 @@ import { Modal, Box, TextField, Button, Typography } from "@mui/material";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { PokemonContext } from "../context/FavoriteContext";
-
+import styles from "./modifyUserModal.module.css";
 
 export default function ModifyUserModal({
   open,
@@ -17,7 +17,6 @@ export default function ModifyUserModal({
   const [nameError, setNameError] = useState("");
   const [ageError, setAgeError] = useState("");
 
- 
   const validateName = (name) => {
     if (!/^[A-Za-z]{3,}$/.test(name)) {
       setNameError("Name must contain at least 3 letters and no spaces.");
@@ -37,23 +36,20 @@ export default function ModifyUserModal({
     return true;
   };
 
-  const handleModifyUser = async () =>{
-    const url = `https://localhost:44337/api/User/${user.id}`;
+  const handleModifyUser = async () => {
+    const url = `http://leventalpokeapi.somee.com/api/User/${user.id}`;
     const data = {
-      
-        "id": user.id,
-        "name": name,
-        "age": age,
-        "favoritesPokemons": user.favoritesPokemons
-      
-  };
-  
-      axios.put(url, data).then((result) => {
-        onClose()
-        setUser(data)
-    } )
-  }
+      id: user.id,
+      name: name,
+      age: age,
+      favoritesPokemons: user.favoritesPokemons,
+    };
 
+    axios.put(url, data).then((result) => {
+      onClose();
+      setUser(data);
+    });
+  };
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -95,16 +91,8 @@ export default function ModifyUserModal({
             {ageError}
           </Typography>
         )}
-        <div
-          style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
-        >
-          <div
-            style={{
-              width: "70%",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
+        <div className={styles.flexEnd}>
+          <div className={styles.buttonsContainer}>
             <Button
               onClick={handleModifyUser}
               variant="contained"

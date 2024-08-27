@@ -1,0 +1,10 @@
+.flexEnd {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+.buttonsContainer {
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+}

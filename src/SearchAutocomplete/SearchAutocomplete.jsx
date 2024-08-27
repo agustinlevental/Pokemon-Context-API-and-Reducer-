@@ -3,6 +3,7 @@ import CustomButton from "../CustomButton/CustomButton";
 import { useContext, useState } from "react";
 import { PokemonContext } from "../context/FavoriteContext";
 import Swal from "sweetalert2";
+import styles from "./searchAutoComplete.module.css"
 
 export default function SearchAutocomplete() {
   const [inputValue, setInputValue] = useState("");
@@ -54,7 +55,7 @@ export default function SearchAutocomplete() {
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center", width: "30%" }}>
+    <div className={styles.SearchContainer}>
       <Autocomplete
         options={state.pokemons.map((pokemon) => pokemon.name)}
         sx={{ width: 300 }}
