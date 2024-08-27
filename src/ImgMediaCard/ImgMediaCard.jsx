@@ -10,7 +10,7 @@ import StarIcon from "@mui/icons-material/Star";
 import { useContext } from "react";
 import CustomButton from "../CustomButton/CustomButton";
 import { PokemonContext } from "../context/FavoriteContext";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import CreateUserModal from "../ModalCreateUser/CreateUserModal";
 
 export default function ImgMediaCard({ pokemon, isFavourite }) {
@@ -18,7 +18,7 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
   const [filteredPokemonName, setFilteredPokemonName] = useState("");
   const [openCreateUserModal, setOpenCreateUserModal] = useState(false);
 
-  const { state,setUser, dispatch } = useContext(PokemonContext);
+  const { state, setUser, dispatch } = useContext(PokemonContext);
   const { user } = state;
 
   useEffect(() => {
@@ -51,103 +51,98 @@ export default function ImgMediaCard({ pokemon, isFavourite }) {
   };
 
   useEffect(() => {
- if(state.filteredPokemons){
-      setBackgroundColor(
-        typeColors[pokemon.type]
-      );}
-    
+    if (state.filteredPokemons) {
+      setBackgroundColor(typeColors[pokemon.type]);
+    }
   }, [state.filteredPokemons]);
- 
 
   const handleAddToFavourites = (pokemon) => {
     if (!user) {
       Swal.fire({
-        title: 'Para agregar Pokemons a favoritos debe tener un usuario, ¿desea crear un usuario?',
+        title:
+          "Para agregar Pokemons a favoritos debe tener un usuario, ¿desea crear un usuario?",
         showCancelButton: true,
-        confirmButtonText: 'Crear usuario',
-        cancelButtonText: 'Cancelar',
+        confirmButtonText: "Crear usuario",
+        cancelButtonText: "Cancelar",
         confirmButtonColor: "rgb(25, 118, 210)",
         cancelButtonColor: "rgb(25, 118, 210)",
       }).then((result) => {
         if (result.isConfirmed) {
           setOpenCreateUserModal(true);
-        }  });
-      }else{
-        dispatch({ type: "addToFavourites", pokemon: pokemon });
-      }
-    
+        }
+      });
+    } else {
+      dispatch({ type: "addToFavourites", pokemon: pokemon });
+    }
   };
   const handleUserCreated = (user) => {
     setUser(user);
-    console.log("user", user)
+
     handleClose();
   };
-const handleClose=()=>{
-  setOpenCreateUserModal(false)
-}
+  const handleClose = () => {
+    setOpenCreateUserModal(false);
+  };
 
   return (
     <div>
-    <CreateUserModal
+      <CreateUserModal
         open={openCreateUserModal}
         onClose={handleClose}
         onUserCreated={handleUserCreated}
       />
-    <Card
-      sx={{
-        width: 200,
-        margin: 2,
-        borderRadius: "10%",
-        backgroundColor: "white",
-        boxShadow: 5,
-      }}
-    >
-      <CardMedia
-        component="img"
-        alt={`${pokemon.name} img`}
-        height="140"
-        image={pokemon.imgSrc}
-        sx={{ backgroundColor: { backgroundColor } }}
-      />
-      <CardContent
+      <Card
         sx={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-          paddingBottom: 0,
+          width: 200,
+          margin: 2,
+          borderRadius: "10%",
           backgroundColor: "white",
+          boxShadow: 5,
         }}
       >
-        <Typography gutterBottom variant="h5" component="div">
-          {filteredPokemonName || pokemon.name}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Ability: {pokemon.ability}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Weight: {pokemon.weight}
-        </Typography>
-      </CardContent>
-      <CardActions
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          paddingBottom: 0,
-          backgroundColor: "white",
-        }}
-      >
-        <IconButton onClick={() => handleAddToFavourites(pokemon)}>
-          {isFavourite ? (
-            <StarIcon sx={{ color: "#FFD700" }} />
-          ) : (
-            <StarBorderIcon />
-          )}
-        </IconButton>
-    
-          
-        
-      </CardActions>
-    </Card>
+        <CardMedia
+          component="img"
+          alt={`${pokemon.name} img`}
+          height="140"
+          image={pokemon.imgSrc}
+          sx={{ backgroundColor: { backgroundColor } }}
+        />
+        <CardContent
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            paddingBottom: 0,
+            backgroundColor: "white",
+          }}
+        >
+          <Typography gutterBottom variant="h5" component="div">
+            {filteredPokemonName || pokemon.name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Ability: {pokemon.ability}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Weight: {pokemon.weight}
+          </Typography>
+        </CardContent>
+        <CardActions
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            paddingBottom: 0,
+            backgroundColor: "white",
+          }}
+        >
+          <IconButton onClick={() => handleAddToFavourites(pokemon)}>
+            {isFavourite ? (
+              <StarIcon sx={{ color: "#FFD700" }} />
+            ) : (
+              <StarBorderIcon />
+            )}
+          </IconButton>
+        </CardActions>
+      </Card>
     </div>
   );
 }

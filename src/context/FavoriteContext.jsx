@@ -26,7 +26,7 @@ const pokemonsReducer = (state, action) => {
       
         if (!isPokemonInFavourites) {
      
-          updatedFavorites = [...state.user.favoritesPokemons, action.pokemon];
+          updatedFavorites = [...state.user.favoritesPokemons, action.pokemon];   
         } else {
   
           updatedFavorites = state.user.favoritesPokemons.filter(
@@ -75,7 +75,7 @@ const pokemonsReducer = (state, action) => {
         ...state,
         pokemons: action.pokemons,
         filteredPokemons: action.pokemons,
-        localDataLoaded: true, // Marcar como datos cargados localmente
+        localDataLoaded: true,
       };
 
     case "setFilteredPokemons":
@@ -142,9 +142,9 @@ const PokemonProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    // if (!state.localDataLoaded) {
+
     fetchPokemons(state.page);
-    // }
+
   }, [state.page]);
 
   const fetchPokemons = async () => {

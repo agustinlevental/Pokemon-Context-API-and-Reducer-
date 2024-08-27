@@ -3,7 +3,7 @@ import { Modal, Box, TextField, Button, Typography } from '@mui/material';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-export default function CreateUserModal({ open, onClose, onUserCreated }) {
+export default function CreateUserModal({ open, onClose, onUserCreated,user }) {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [nameError, setNameError] = useState('');
@@ -46,7 +46,7 @@ export default function CreateUserModal({ open, onClose, onUserCreated }) {
       onClose();
       Swal.fire({
         title: "Good job!",
-        text: "You can now add favorite Pokémon",
+        text: "You can now add favorite Pokemon",
         icon: "success"
       });
     } catch (error) {

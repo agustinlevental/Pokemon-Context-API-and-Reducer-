@@ -8,7 +8,7 @@ const CustomButton = ({ name, onClick, disabled ,size,loading }) => {
     variant="contained"
  color="primary"
     onClick={onClick}
-    disabled={disabled || loading} // Disable button while loading
+    disabled={disabled || loading}
     size={size}
     sx={{width:"170px"}}
   >

@@ -54,6 +54,17 @@ h2 {
   justify-content: center;
 
 }
+p {
+  margin: 0;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.43;
+  letter-spacing: 0.01071em;
+  color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+}
 
 button {
   border-radius: 8px;
