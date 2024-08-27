@@ -1,4 +1,5 @@
 # Pokémon Fullstack App
+Aplicación desplegada y disponible online en : https://pokemon-fullstack-react-context-reducer-net8-web-gnvwr0o36.vercel.app/
 
 Este proyecto es una aplicación Fullstack que utiliza **React.js** para el frontend y **.NET 8** con **Entity Framework** para crear una API Web siguiendo el enfoque code-first. La aplicación permite realizar operaciones CRUD (Crear, Leer, Actualizar y Eliminar) usuarios en una base de datos real de Somee. Una vez creado el usuario, se puede agregar a favoritos tarjetas de pokemones, las cuales están populadas con el endpoint de **PokeAPI** y estilizadas con **module.css**.
 
@@ -8,11 +9,6 @@ Este proyecto es una aplicación Fullstack que utiliza **React.js** para el fron
 - **Favoritos de Pokémones:** Agrega a favoritos tarjetas de pokemones con datos obtenidos desde la PokeAPI.
 - **Frontend:** Desarrollado con React.js.
 - **Backend:** API Web creada con .NET 8 y Entity Framework.
-
-## Requisitos Previos
-
-- Node.js
-- .NET 8 SDK
 
 ## Correr el Frontend de Manera Local
 
