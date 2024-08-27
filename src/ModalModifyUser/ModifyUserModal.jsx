@@ -37,7 +37,7 @@ export default function ModifyUserModal({
   };
 
   const handleModifyUser = async () => {
-    const url = `http://leventalpokeapi.somee.com/api/User/${user.id}`;
+    const url = `https://leventalpokeapi.somee.com/api/User/${user.id}`;
     const data = {
       id: user.id,
       name: name,

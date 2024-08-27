@@ -38,7 +38,7 @@ export default function CreateUserModal({ open, onClose, onUserCreated,user }) {
     }
 
     try {
-      const response = await axios.post('http://leventalpokeapi.somee.com/api/User', {
+      const response = await axios.post('https://leventalpokeapi.somee.com/api/User', {
         name,
         age: parseInt(age),
         favoritesPokemons: []

@@ -27,7 +27,7 @@ export const User = ({ userId }) => {
       try {
         if (userId) {
           const response = await axios.get(
-            `http://leventalpokeapi.somee.com/api/User/${userId}`
+            `https://leventalpokeapi.somee.com/api/User/${userId}`
           );
           setUser(response.data);
         }
