@@ -25,7 +25,7 @@ npm run dev
 4. **Accede al frontend:**
 El frontend estará disponible en http://localhost:3000.
 
-## Correr el Frontend de Manera Local
+## Configuración del Backend
 El backend está actualmente desplegado, por lo cual podrás interactuar con los endpoints y la base de datos sin tener que instalar nada localmente. Próximamente se colocará aquí el enlace al repositorio del backend donde se encuentran las APIs Web realizadas con .NET 8 y Entity Framework.
 
 Accede a Swagger para testear los endpoints:
