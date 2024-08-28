@@ -1,5 +1,5 @@
-# Pokémon Fullstack App
-Aplicación desplegada y disponible online en : https://pokemon-fullstack-react-context-reducer-net8-web-gnvwr0o36.vercel.app/
+# Pokemon Fullstack App
+Aplicación desplegada y disponible online en : https://pokemon-fullstack-react-context-reducer-net8-web-phzn4q0d6.vercel.app/
 
 Este proyecto es una aplicación Fullstack que utiliza **React.js** para el frontend y **.NET 8** con **Entity Framework** para crear una API Web siguiendo el enfoque code-first. La aplicación permite realizar operaciones CRUD (Crear, Leer, Actualizar y Eliminar) usuarios en una base de datos real de Somee. Una vez creado el usuario, se puede agregar a favoritos tarjetas de pokemones, las cuales están populadas con el endpoint de **PokeAPI** y estilizadas con **module.css**.
 
@@ -7,7 +7,7 @@ Este proyecto es una aplicación Fullstack que utiliza **React.js** para el fron
 
 - **CRUD de Usuarios:** Crear, Leer, Actualizar y Eliminar usuarios en la base de datos.
 - **Favoritos de Pokémones:** Agrega a favoritos tarjetas de pokemones con datos obtenidos desde la PokeAPI.
-- **Frontend:** Desarrollado con React.js.
+- **Frontend:** Desarrollado con React.js , usando useContext para almacenar estados globales, y Reducer para manejar acciones dentro de la aplicación.
 - **Backend:** API Web creada con .NET 8 y Entity Framework.
 
 ## Correr el Frontend de Manera Local
@@ -29,9 +29,5 @@ Accede a Swagger para testear los endpoints:
 http://leventalpokeapi.somee.com/swagger/index.html
 
 Esto abrirá el Swagger para testear los endpoints de la API Web de la misma manera que desde la aplicación.
-
-1. **Utiliza la aplicación:**
-
-Ve al navegador http://localhost:3000 y presiona F5 para actualizar la página.
 
 ¡Ya puedes utilizar la aplicación!
