@@ -1,11 +1,52 @@
+.modalBox {
+  width: 90%;
+  max-width: 400px;
+  margin: auto;
+  margin-top: 15%;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+}
+.modalTitle {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+.textField{
+  width: 100%;
+}
 .flexEnd {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+.buttonsContainer {
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+@media (max-width: 600px) {
+  .modalBox {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .modalTitle {
+    font-size: 1.2em;
+    margin-bottom: 15px;
+  }
+  .containerTextFields{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .textField{
+    width: 90% !important;
+  }
+
+  .buttonsContainer{
     width: 100%;
-    display: flex;
-    justify-content: flex-end;
+    justify-content: space-around;
   }
-  .buttonsContainer {
-    width: 70%;
-    display: flex;
-    justify-content: space-between;
-  }
-  
+}

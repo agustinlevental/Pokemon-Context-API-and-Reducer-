@@ -107,10 +107,10 @@ export const User = ({ userId }) => {
                   justifyContent: "flex-end",
                   padding: "0px",
                   color: "grey",
-                  width: "20px",
+                  minWidth: "30px"
                 }}
               >
-                <EditIcon sx={{ width: "20px" }} />
+                <EditIcon className={styles.iconButton} />
               </Button>
             </div>
           </CardContent>

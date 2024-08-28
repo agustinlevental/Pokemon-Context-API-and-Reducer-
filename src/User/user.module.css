@@ -8,3 +8,13 @@
   justify-content: flex-end;
   width: 100%;
 }
+
+.iconButton {
+  min-width: 30px !important;
+  padding: 6px !important;
+}
+
+.iconButton svg {
+  width: 20px !important;
+  height: 20px !important;
+}

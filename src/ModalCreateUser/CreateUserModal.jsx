@@ -57,8 +57,9 @@ export default function CreateUserModal({ open, onClose, onUserCreated,user }) {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Box sx={{ width: 400, margin: 'auto', marginTop: '15%', padding: 3, backgroundColor: 'white', borderRadius: 2 }}>
-        <h2>Create User</h2>
+       <Box className={styles.modalBox}>
+       <h2 className={styles.modalTitle}>Create User</h2>
+       <div className={styles.containerTextFields}>
         <TextField
           fullWidth
           label="Name"
@@ -66,6 +67,7 @@ export default function CreateUserModal({ open, onClose, onUserCreated,user }) {
           onChange={(e) => setName(e.target.value)}
           onBlur={() => validateName(name)}
           margin="normal"
+          className={styles.textField}
         />
         {nameError && <Typography sx={{ fontSize: '10px', color: 'red' }}>{nameError}</Typography>}
         
@@ -76,7 +78,9 @@ export default function CreateUserModal({ open, onClose, onUserCreated,user }) {
           onChange={(e) => setAge(e.target.value)}
           onBlur={() => validateAge(age)}
           margin="normal"
+          className={styles.textField}
         />
+        </div>
         {ageError && <Typography sx={{ fontSize: '10px', color: 'red' }}>{ageError}</Typography>}
 <div className={styles.flexEnd}>
         <div className={styles.buttonsContainer}>

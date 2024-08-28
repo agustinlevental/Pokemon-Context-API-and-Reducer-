@@ -1,5 +1,22 @@
 .SearchContainer {
   display: flex;
   align-items: center;
-  width: 30%;
+
+}
+.iconButton {
+  min-width: 30px !important;
+  padding: 6px !important;
+}
+
+.iconButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 768px) {
+  .SearchContainer{
+    width: 80%;
+    display: flex;
+    justify-content: center;
+  }
 }

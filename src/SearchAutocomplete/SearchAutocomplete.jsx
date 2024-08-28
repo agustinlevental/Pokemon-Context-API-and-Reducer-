@@ -1,9 +1,10 @@
-import { Autocomplete, Box, TextField } from "@mui/material";
-import CustomButton from "../CustomButton/CustomButton";
+import { Autocomplete, Box, Button, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import { PokemonContext } from "../context/FavoriteContext";
 import Swal from "sweetalert2";
-import styles from "./searchAutoComplete.module.css"
+import styles from "./searchAutoComplete.module.css";
+import SearchIcon from '@mui/icons-material/Search';
+import ReplayIcon from '@mui/icons-material/Replay';
 
 export default function SearchAutocomplete() {
   const [inputValue, setInputValue] = useState("");
@@ -11,7 +12,7 @@ export default function SearchAutocomplete() {
   const { searchPokemon, state, dispatch } = useContext(PokemonContext);
 
   const handleInputChange = (event, value) => {
-    setInputValue(event.target.value);
+    setInputValue(value);
   };
 
   const handleChange = (event, newValue) => {
@@ -43,6 +44,7 @@ export default function SearchAutocomplete() {
 
     setLoading(false);
   };
+
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
       await handleSearch();
@@ -51,12 +53,13 @@ export default function SearchAutocomplete() {
 
   const handleCleanSearch = () => {
     dispatch({ type: "setFilteredPokemons", filteredPokemons: state.pokemons });
-    setInputValue("")
+    setInputValue(""); 
   };
 
   return (
     <div className={styles.SearchContainer}>
       <Autocomplete
+        value={inputValue}  
         options={state.pokemons.map((pokemon) => pokemon.name)}
         sx={{ width: 300 }}
         renderInput={(params) => (
@@ -70,12 +73,22 @@ export default function SearchAutocomplete() {
         )}
         onInputChange={handleInputChange}
         onChange={handleChange}
-        style={{ marginRight: "10px" }}
       />
-      <CustomButton name="Buscar" onClick={handleSearch} loading={loading} />
-      <Box sx={{ marginLeft: "10px" }}>
+      <Button 
+        onClick={handleSearch} 
+        loading={loading} 
+        className={styles.iconButton}
+      >
+        <SearchIcon />
+      </Button>
+      <Box>
         {state.filteredPokemons.length === 1 && (
-          <CustomButton name={"Limpiar Búsqueda"} onClick={handleCleanSearch} />
+          <Button 
+            onClick={handleCleanSearch} 
+            className={styles.iconButton}
+          >
+            <ReplayIcon />
+          </Button>
         )}
       </Box>
     </div>
